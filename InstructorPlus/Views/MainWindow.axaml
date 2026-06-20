@@ -1,0 +1,342 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:InstructorPlus.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:InstructorPlus.Converters"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="InstructorPlus.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Инструктор+"
+        WindowState="Maximized">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Resources>
+        <converters:LessonStatusToStringConverter x:Key="LessonStatusToStringConverter"/>
+        <converters:LessonStatusToColorConverter x:Key="LessonStatusToColorConverter"/>
+    </Window.Resources>
+    
+
+    <Grid ColumnDefinitions="Auto *">
+        <Button Grid.ColumnSpan="2" Content="Выйти" Command="{Binding ExitProgramCommand}" Foreground="White" FontWeight="Black" FontSize="28" Background="Red" VerticalAlignment="Top" Margin="10" ZIndex="1"/>
+        <TabControl Grid.Column="1" HorizontalContentAlignment="Center">
+            <TabControl.Styles>
+                <Style Selector="TabControl /template/ WrapPanel">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
+                
+                <Style Selector="TabControl > TabItem">
+                    <Setter Property="FontSize" Value="38"/>
+                    <Setter Property="FontWeight" Value="Black"/>
+                    <Setter Property="Foreground" Value="#2a4252"/>
+                    <Setter Property="Margin" Value="0 0 0 15"/>
+                </Style>
+
+            </TabControl.Styles>
+            <TabItem Header="Занятия" >
+                <Grid RowDefinitions="8* * *" ColumnDefinitions="Auto *">
+                    
+                    <Grid.Styles>
+                        <Style Selector="Grid > Button">
+                            <Setter Property="FontSize" Value="28"/>
+                            <Setter Property="FontWeight" Value="Black"/>
+                            <Setter Property="Width" Value="500"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="0,15,0,0"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Background" Value="#2a4252"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </Grid.Styles>
+                    
+                    <StackPanel Grid.ColumnSpan="2">
+                        <DataGrid ItemsSource="{Binding Lessons}"
+                          IsReadOnly="True"
+                          SelectedItem="{Binding SelectedLesson}"
+                          BorderBrush="#2a4252" BorderThickness="3" CornerRadius="6">
+                    
+                            <DataGrid.Styles>
+                                <Style Selector="DataGridRow">
+                                    <Setter Property="Foreground" Value="#2a4252"/>
+                                </Style>
+                                <Style Selector="DataGridColumnHeader">
+                                    <Setter Property="FontSize" Value="28"/>
+                                    <Setter Property="FontWeight" Value="DemiBold"/>
+                                    <Setter Property="Foreground" Value="#2a4252"/>
+                                </Style>
+
+                                </DataGrid.Styles>
+                                
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Дата" Binding="{Binding LessonDateDisplay}" FontSize="22"/>
+                                    <DataGridTextColumn Header="Время" Binding="{Binding LessonTimeDisplay}" FontSize="22"/>
+                                    <DataGridTextColumn Header="Маршрут" Binding="{Binding RouteName}" FontSize="22"/>
+                                    <DataGridTextColumn Header="Авто" Binding="{Binding CarModel}" FontSize="22"/>
+                                    <DataGridTextColumn Header="Место встречи" Binding="{Binding MeetingPlace}" FontSize="22"/>
+                                    <DataGridTextColumn Header="Ученик" Binding="{Binding StudentName}" FontSize="22"/>
+                                    <DataGridTextColumn Header="Длит." Binding="{Binding DurationMinutes}" FontSize="22"/>
+                                    <DataGridTemplateColumn Header="Статус">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                    Text="{Binding Status, Converter={StaticResource LessonStatusToStringConverter}}"
+                                                    Foreground="{Binding Status, Converter={StaticResource LessonStatusToColorConverter}}"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="22"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    
+                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10" VerticalAlignment="Bottom">
+                            <StackPanel.Styles>
+                                <Style Selector="StackPanel > Button">
+                                    <Setter Property="Background" Value="#2a4252"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Width" Value="50"/>
+                                    <Setter Property="Height" Value="40"/>
+                                    <Setter Property="FontSize" Value="24"/>
+                                    <Setter Property="FontWeight" Value="Black"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </StackPanel.Styles>
+                            <Button Content="&lt;&lt;" Command="{Binding FirstPageCommand}" />
+                            <Button Content="&lt;" Command="{Binding PrevPageCommand}" />
+                            <TextBlock Text="{Binding PageInfo}" FontSize="24" VerticalAlignment="Center" Foreground="#2a4252" FontWeight="Black"/>
+                            <Button Content="&gt;" Command="{Binding NextPageCommand}" />
+                            <Button Content="&gt;&gt;" Command="{Binding LastPageCommand}" />
+                            <ComboBox ItemsSource="{Binding PageSizes}" SelectedItem="{Binding CurrentPageSize}" Width="80" FontSize="24" Foreground="#2a4252" FontWeight="DemiBold"/>
+                        </StackPanel>
+                    
+                    <Button Grid.Column="0" Grid.Row="2" Content="Отменить занятие" Command="{Binding DeleteLessonCommand}" IsVisible="{Binding IsInstructor}" Background="Red"/>
+                    <Button Grid.Column="1" Grid.Row="2" Content="Добавить занятие" Command="{Binding OpenAddLessonCommand}" HorizontalAlignment="Right" IsVisible="{Binding IsInstructor}" Background="Green"/>
+                </Grid>
+            </TabItem>
+            
+            <TabItem Header="{Binding StudentsText}">
+                <Grid RowDefinitions="8* * *" ColumnDefinitions="* * * *" >
+                    <Grid.Styles>
+                        <Style Selector="Grid > Button">
+                            <Setter Property="FontSize" Value="28"/>
+                            <Setter Property="FontWeight" Value="Black"/>
+                            <Setter Property="Foreground" Value="white"/>
+                            <Setter Property="Margin" Value="0 0 0 30"/>
+                            <Setter Property="VerticalAlignment" Value="Bottom"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </Grid.Styles>
+                    <StackPanel Grid.ColumnSpan="4">
+                        <DataGrid ItemsSource="{Binding Students}" IsReadOnly="True" SelectedItem="{Binding SelectedStudent}" BorderBrush="#2a4252" BorderThickness="3" CornerRadius="6">
+                            <DataGrid.Styles>
+                                <Style Selector="DataGridRow">
+                                    <Setter Property="Foreground" Value="#2a4252"/>
+                                </Style>
+                                <Style Selector="DataGridColumnHeader">
+                                    <Setter Property="FontSize" Value="28"/>
+                                    <Setter Property="FontWeight" Value="DemiBold"/>
+                                    <Setter Property="Foreground" Value="#2a4252"/>
+                                </Style>
+                            </DataGrid.Styles>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Ф.И.О." Binding="{Binding FullName}" FontSize="22"/>
+                                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" FontSize="22"/>
+                                <DataGridTextColumn Header="Часов оплачено" Binding="{Binding TotalHoursRequired}" FontSize="22"/>
+                                <DataGridTextColumn Header="Часов откатано" Binding="{Binding HoursCompleted}" FontSize="22"/>
+                                <DataGridTextColumn Header="Дата поступления" Binding="{Binding EnrollmentDate}" FontSize="22"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10" VerticalAlignment="Bottom" Grid.ColumnSpan="4">
+                        <StackPanel.Styles>
+                            <Style Selector="StackPanel > Button">
+                                <Setter Property="Background" Value="#2a4252"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Width" Value="50"/>
+                                <Setter Property="Height" Value="40"/>
+                                <Setter Property="FontSize" Value="24"/>
+                                <Setter Property="FontWeight" Value="Black"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </StackPanel.Styles>
+                        <Button Content="&lt;&lt;" Command="{Binding FirstPageStudentCommand}"/>
+                        <Button Content="&lt;" Command="{Binding PrevPageStudentCommand}"/>
+                        <TextBlock Text="{Binding PageInfoStudent}" FontSize="24" VerticalAlignment="Center" Foreground="#2a4252" FontWeight="Black"/>
+                        <Button Content="&gt;" Command="{Binding NextPageStudentCommand}"/>
+                        <Button Content="&gt;&gt;" Command="{Binding LastPageStudentCommand}"/>
+                        <ComboBox ItemsSource="{Binding PageSizesStudent}" SelectedItem="{Binding CurrentPageSizeStudent}" Width="80" FontSize="24" Foreground="#2a4252" FontWeight="DemiBold"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="0" Grid.Row="2" Content="Удалить ученика" Command="{Binding DeleteStudentCommand}" IsVisible="{Binding IsAdmin}" Background="Red"/>
+                    <Button Grid.Column="1" Grid.Row="2" Content="Посмотреть статистику" Command="{Binding OpenStudentStatisticCommand}" Background="#2a4252" IsVisible="{Binding IsAdmin}"/>
+                    <Button Grid.Column="2" Grid.Row="2" Content="Редактировать" Command="{Binding EditStudentCommand}" Background="#4A88B0" IsVisible="{Binding IsAdmin}"/>
+                    <Button Grid.Column="3" Grid.Row="2" Content="Добавить ученика" Command="{Binding AddStudentCommand}" HorizontalAlignment="Right" IsVisible="{Binding IsAdmin}" Background="Green"/>
+
+                    <Button Grid.Row="2" Grid.ColumnSpan="4" Content="Посмотреть статистику" Command="{Binding OpenStudentStatisticCommand}" Background="#2a4252" IsVisible="{Binding IsInstructor}"/>
+                </Grid>
+            </TabItem>
+            
+            <TabItem Header="Моя Статистика"
+                     IsVisible="{Binding IsInstructor}">
+                <Border Background="#F0F4F8" CornerRadius="20" Padding="30" VerticalAlignment="Top">
+                    <StackPanel Spacing="18">
+                        <Border Background="White" CornerRadius="16" Padding="24 20"
+                                BoxShadow="0 2 12 #20000000">
+                            <Grid RowDefinitions="Auto Auto Auto Auto Auto Auto">
+                                
+                                <Grid.Styles>
+                                    <Style Selector="Grid > StackPanel">
+                                        <Setter Property="Orientation" Value="Horizontal"/>
+                                        <Setter Property="Spacing" Value="12"/>
+                                    </Style>
+
+                                </Grid.Styles>
+                                <!-- Макс. часов -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" >
+                                    <Border Background="#E8F5E9" CornerRadius="12" Width="44" Height="44">
+                                        <TextBlock Text="⌛" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Макс. часов до экзамена в ГАИ"
+                                                   FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding MaxHoursString}"
+                                                   FontSize="38" FontWeight="Bold" Foreground="#E65100"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <!-- Мин. часов -->
+                                <StackPanel Grid.Row="1" Margin="0 16 0 0">
+                                    <Border Background="#FFF3E0" CornerRadius="12" Width="44" Height="44">
+                                        <TextBlock Text="⏱️" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Мин. часов до экзамена в ГАИ" FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding MinHoursString}" FontSize="38" FontWeight="Bold" Foreground="#2E7D32"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <!-- Самый частый автомобиль -->
+                                <StackPanel Grid.Row="2" Margin="0 16 0 0">
+                                    <Border Background="#FFE8E8" CornerRadius="12" Width="44" Height="44">
+                                        <TextBlock Text="🚗" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Самый частый автомобиль" FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding MostFrequentCar}" FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <!-- Самый частый маршрут -->
+                                <StackPanel Grid.Row="3" Margin="0 16 0 0">
+                                    <Border Background="#EDFFED" CornerRadius="12" Width="44" Height="44">
+                                        <TextBlock Text="🛣️" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Самый частый маршрут" FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding MostFrequentRoute}" FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <!-- Среднее кол-во занятий за месяц -->
+                                <StackPanel Grid.Row="4" Margin="0 16 0 0">
+                                    <Border Background="#E8ECFF" CornerRadius="12" Width="44" Height="44">
+                                        <TextBlock Text="🗓️" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Среднее кол-во занятий за месяц" FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding AvgPerMonth}" FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <!-- занятий за этот месяц -->
+                                <StackPanel Grid.Row="5" Margin="0 16 0 0">
+                                    <Border Background="#F2E8FF" CornerRadius="12" Width="44" Height="44">
+                                        <TextBlock Text="📅" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="занятий за этот месяц" FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding CurMonthLessons}" FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+            </TabItem>
+            
+            <TabItem Header="Филиалы"
+                     IsVisible="{Binding IsAdmin}">
+                <Grid RowDefinitions="Auto *">
+                    <ScrollViewer VerticalAlignment="Top">
+                        <Border Background="#F0F4F8" CornerRadius="20" Padding="20">
+                            <StackPanel>
+                                <ItemsControl ItemsSource="{Binding Branches}" >
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate >
+                                            <Border Background="White" CornerRadius="16" Padding="20" Margin="10">
+                                                <Grid RowDefinitions="Auto Auto" ColumnDefinitions="Auto Auto *">
+                                                    <TextBlock Text="{Binding Name}" FontSize="36" FontWeight="DemiBold" Foreground="#2a4252"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Address}" FontSize="28" FontWeight="Medium" Foreground="#2a4252"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Phone}" FontSize="28" FontWeight="Medium" Foreground="#2a4252"/>
+                                                    <Button Grid.Row="0" Grid.Column="2" Background="#4A88B0" Foreground="white" Content="Редактировать" Grid.RowSpan="2" FontSize="28" FontWeight="Black" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20 0 0 0"
+                                                            Command="{ReflectionBinding DataContext.EditBranchCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding }"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
+                    <Button Grid.Row="1" Content="Добавить филиал" Command="{Binding AddBranchCommand}" Margin="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Green" Foreground="white" FontSize="32" FontWeight="Black"/>
+                </Grid>
+            </TabItem>
+            
+            <TabItem Header="Инструкторы"
+                IsVisible="{Binding IsAdmin}">
+                <Grid RowDefinitions="Auto *">
+                    <ScrollViewer VerticalAlignment="Top">
+                        <Border Background="#F0F4F8" CornerRadius="20" Padding="20">
+                            <StackPanel>
+                                <ItemsControl ItemsSource="{Binding Instructors}" >
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate >
+                                            <Border Background="White" CornerRadius="16" Padding="20" Margin="10">
+                                                <Grid RowDefinitions="Auto Auto" ColumnDefinitions="Auto Auto *">
+                                                    <TextBlock Text="{Binding FullName}" FontSize="36" FontWeight="DemiBold" Foreground="#2a4252"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding BranchName}" FontSize="28" FontWeight="Medium" Foreground="#2a4252"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Phone}" FontSize="28" FontWeight="Medium" Foreground="#2a4252"/>
+                                                    <Button Grid.Row="0" Grid.Column="2" Background="#4A88B0" Foreground="white" Content="Редактировать" Grid.RowSpan="2" FontSize="28" FontWeight="Black" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20 0 0 0"
+                                                            Command="{ReflectionBinding DataContext.EditInstructorCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding }"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
+                    <Button Grid.Row="1" Content="Добавить инструктора" Command="{Binding AddInstructorCommand}" Margin="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Green" Foreground="white" FontSize="32" FontWeight="Black"/>
+                </Grid>
+            </TabItem>
+            
+            <TabItem Header="Документы"
+                IsVisible="{Binding IsAdmin}">
+                
+            </TabItem>
+            
+            <TabItem Header="Общая статистика"
+                IsVisible="{Binding IsAdmin}">
+                
+            </TabItem>
+        </TabControl>
+    </Grid>
+    
+</Window>

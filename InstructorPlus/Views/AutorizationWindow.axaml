@@ -1,0 +1,60 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:InstructorPlus.ViewModels"
+        xmlns:viewModels="clr-namespace:InstructorPlus.ViewModels"
+        xmlns:viewModels1="clr-namespace:InstructorPlus.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="InstructorPlus.Views.AutorizationWindow"
+        Title="Авторизация"
+        x:DataType="viewModels1:AutorizationWindowViewModel"
+        WindowState="Maximized">
+        
+        <Grid RowDefinitions="7* * * * * 6* ">
+                <TextBlock Text="Instructor+" FontSize="62" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
+                <Grid.Styles>
+                        <Style Selector="Grid > TextBlock">
+                                <Setter Property="FontSize" Value="34"/>
+                                <Setter Property="FontWeight" Value="Black"/>
+                                <Setter Property="Width" Value="400"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="0,15,0,0"/>
+                                <Setter Property="Foreground" Value="#2a4252"/>
+                        </Style>
+                </Grid.Styles>
+                
+                <Grid.Styles>
+                        <Style Selector="Grid > TextBox">
+                                <Setter Property="FontSize" Value="34"/>
+                                <Setter Property="FontWeight" Value="Black"/>
+                                <Setter Property="Width" Value="400"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Foreground" Value="#2a4252"/>
+                                <Setter Property="Margin" Value="0 0 0 5"/>
+                        </Style>
+                </Grid.Styles>
+
+                <Grid.Styles>
+                        <Style Selector="Grid > Button">
+                                <Setter Property="FontSize" Value="34"/>
+                                <Setter Property="FontWeight" Value="Black"/>
+                                <Setter Property="Width" Value="200"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="0,15,0,0"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" Value="#2a4252"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                </Grid.Styles>
+
+                <TextBlock Grid.Row="1" Text="Логин" />
+                <TextBox Grid.Row="2" Text="{Binding Login}"/>
+                <TextBlock Grid.Row="3" Text="Пароль" />
+                <TextBox Grid.Row="4" Text="{Binding Password}" PasswordChar="*" Classes="revealPasswordButton"/>
+                <Button Grid.Row="5" Content="Войти" Command="{Binding Enter}" HotKey="Enter"/>
+        </Grid>
+</Window>

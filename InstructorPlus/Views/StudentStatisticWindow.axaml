@@ -1,0 +1,135 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:InstructorPlus.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="InstructorPlus.Views.StudentStatisticWindow"
+        x:DataType="vm:StudentStatisticViewModel"
+        Title="Статистика ученика"
+        WindowState="Maximized">
+
+    <Grid RowDefinitions="Auto Auto Auto" Width="895">
+        
+        <Grid.Styles>
+            <Style Selector="Grid > Button">
+                <Setter Property="FontSize" Value="28"/>
+                <Setter Property="FontWeight" Value="Black"/>
+                <Setter Property="Width" Value="400"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,20,0,0"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Background" Value="#2a4252"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            </Style>
+        </Grid.Styles>
+
+
+        <TextBlock HorizontalAlignment="Center" FontSize="38" FontWeight="Black" Foreground="#2a4252" Margin="0 0 0 15" Text="{Binding SelectedStudent.FullName}"/>
+        
+        <Border Grid.Row="1" Background="#F0F4F8" CornerRadius="20" Padding="30">
+            <StackPanel Spacing="18">
+                <!-- Блок 1: Часы до экзамена -->
+                <Border Background="White" CornerRadius="16" Padding="24 20"
+                        BoxShadow="0 2 12 #20000000">
+                    <Grid RowDefinitions="Auto Auto Auto Auto Auto Auto Auto">
+                        <Grid.Styles>
+                            <Style Selector="Grid > StackPanel">
+                                <Setter Property="Orientation" Value="Horizontal"/>
+                                <Setter Property="Spacing" Value="12"/>
+                                <Setter Property="Margin" Value="0 0 0 16"/>
+                            </Style>
+                        </Grid.Styles>
+                        
+                        <!-- Самый частый маршрут -->
+                        <StackPanel Grid.Row="0" >
+                            <Border Background="#EDEDED" CornerRadius="12" Width="44" Height="44">
+                                <TextBlock Text="🛣️" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Самый частый маршрут"
+                                           FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                <TextBlock Text="{Binding MostFrequentRoute}"
+                                           FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Самый частый автомобиль -->
+                        <StackPanel Grid.Row="1" >
+                            <Border Background="#FFE8E8" CornerRadius="12" Width="44" Height="44">
+                                <TextBlock Text="🚗" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Самый частый автомобиль"
+                                           FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                <TextBlock Text="{Binding MostFrequentCar}"
+                                           FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Количество занятий за этот месяц -->
+                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <Border Background="#F6EBFF" CornerRadius="12" Width="44" Height="44">
+                                <TextBlock Text="🗓️" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Количество занятий за этот месяц"
+                                           FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                <TextBlock Text="{Binding CurMonthCount}"
+                                           FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Сдана ли внутренняя теория -->
+                        <StackPanel Grid.Row="3" Orientation="Horizontal">
+                            <Border Background="#E8FFFF" CornerRadius="12" Width="44" Height="44">
+                                <TextBlock Text="📄" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Сдана ли внутренняя теория"
+                                           FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                <TextBlock Text="{Binding IsTheoryInternalPassed}"
+                                           FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Сдана ли внутренняя практика -->
+                        <StackPanel Grid.Row="4" Orientation="Horizontal">
+                            <Border Background="#EBEEFF" CornerRadius="12" Width="44" Height="44">
+                                <TextBlock Text="📄" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Сдана ли внутренняя практика"
+                                           FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                <TextBlock Text="{Binding  IsPracticeInternalPassed}"
+                                           FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Сдана ли теория в ГАИ -->
+                        <StackPanel Grid.Row="5" Orientation="Horizontal">
+                            <Border Background="#EDFFED" CornerRadius="12" Width="44" Height="44">
+                                <TextBlock Text="👮" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Сдана ли теория в ГАИ"
+                                           FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                <TextBlock Text="{Binding  IsTheoryGaiPassed}"
+                                           FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Сдана ли практика в ГАИ -->
+                        <StackPanel Grid.Row="6" Orientation="Horizontal">
+                            <Border Background="#FFFFE5" CornerRadius="12" Width="44" Height="44">
+                                <TextBlock Text="👮" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Сдана ли практика в ГАИ"
+                                           FontSize="28" Foreground="#4A5568" FontWeight="Medium"/>
+                                <TextBlock Text="{Binding  IsTheoryGaiPassed}"
+                                           FontSize="38" FontWeight="Bold" Foreground="#2a4252"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </Border>
+        <Button Grid.Row="2" Command="{Binding CancelCommandCommand}" Content="Назад"/>
+    </Grid>
+</Window>
